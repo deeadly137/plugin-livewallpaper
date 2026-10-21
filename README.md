@@ -1,17 +1,20 @@
 # Live Wallpaper
 
-A desktop-widget wallpaper plugin for Caelestia Shell. It renders a video or animated image above the built-in wallpaper and below normal windows.
+A Caelestia Shell plugin for video and animated-image wallpapers. It adds a **Live wallpaper** section to Nexus > Wallpaper & style and uses the shell's normal background renderer, so videos stay behind windows instead of being drawn as an overlay.
 
 ## Requirements
 
-- A plugin-enabled Caelestia Shell build with the `desktop-widget` entry point, such as `caelestia-shell-plugins-git`.
+- A plugin-enabled Caelestia Shell build with `page-extension` and `desktop-widget` entry points, such as `caelestia-shell-plugins-git`.
+- `ffmpeg`/`ffprobe` for the `caelestia wallpaper` CLI that generates thumbnails and validates video files.
 - Qt Multimedia support for video playback (included with the shell dependencies).
 
 ## Install
 
+Install from Nexus > Plugins (recommended), or clone it into the managed plugin directory:
+
 ```sh
-mkdir -p ~/.config/caelestia/plugins
-git clone https://github.com/deeadly137/plugin-livewallpaper.git ~/.config/caelestia/plugins/plugin-livewallpaper
+mkdir -p ~/.local/share/caelestia/plugins
+git clone https://github.com/deeadly137/plugin-livewallpaper.git ~/.local/share/caelestia/plugins/plugin-livewallpaper
 ```
 
 Enable the plugin in `~/.config/caelestia/plugins.json`:
@@ -22,32 +25,28 @@ Enable the plugin in `~/.config/caelestia/plugins.json`:
 }
 ```
 
-With no source configured, the plugin uses the bundled `loop.gif`.
+## Use
 
-## Configure a video or GIF
+1. Open Nexus > Wallpaper & style.
+2. In **Live wallpaper**, choose a video, GIF, or animated WebP.
+3. Use **Play wallpaper** to pause or resume playback.
 
-Set `source` to an absolute path:
+Videos are passed to `Wallpapers.setWallpaper()`, which is the same path used by the normal wallpaper picker. The shell renders them through its built-in `WallpaperImpl`/`Visual` video path. GIF/WebP files additionally use an `AnimatedImage` desktop overlay because the built-in renderer only keeps the first frame for those formats.
 
-```json
-{
-    "enabled": ["deeadly137/livewall"],
-    "settings": {
-        "deeadly137/livewall": {
-            "source": "/home/deadly/Videos/wallpaper.mp4"
-        }
-    }
-}
-```
+## Settings
 
-Supported video extensions are `.mp4`, `.m4v`, `.webm`, `.mkv`, `.mov`, and `.avi`. Animated GIF/WebP files are rendered with `AnimatedImage`.
+| Key | Type | Description |
+| --- | --- | --- |
+| `source` | string | Absolute path to the current live wallpaper. The page extension writes this when you pick a file. |
 
-The same setting will be available through the plugin settings UI once that is wired into the shell.
+The source is persisted in `plugins.json`, and the normal wallpaper path is persisted by the CLI, so the live wallpaper survives shell restarts.
 
 ## Plugin details
 
 - Manifest id: `deeadly137/livewall`
-- Entry point: `desktop-widget`
-- Source: `LiveWallpaper.qml`
+- Entry points:
+  - `page-extension` (`WallpaperSettings.qml`, page `wallpaper`)
+  - `desktop-widget` (`LiveWallpaper.qml`, animated-image overlay)
 - Settings: `settings.qml` (`source`)
 
 ## License

@@ -5,7 +5,7 @@ SettingsObject {
 
     SettingMeta on source {
         label: "Video or animated image"
-        description: "Absolute path to a video or animated image. Leave empty for the bundled demo."
+        description: "Absolute path to a video, GIF, or animated WebP. Use the controls in Wallpaper & style to pick one."
         inputType: SettingMeta.TextField
     }
 }

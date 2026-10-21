@@ -1,46 +1,26 @@
 import QtQuick
-import QtMultimedia
 import Caelestia.Plugins
+import Caelestia.State
+import qs.services
 
-// A desktop widget that covers the wallpaper but stays below normal windows. Video and animated
-// image playback are entirely plugin-side; the shell only provides the surface.
+// Animated GIF/WebP wallpapers need an AnimatedImage; the shell's background Visual only keeps a
+// still frame for those formats. Videos are rendered by the normal background path instead.
 Item {
     id: root
 
     required property SettingsObject settings
 
-    readonly property string source: settings.source || Qt.resolvedUrl("loop.gif")
-    readonly property bool isVideo: /\.(mp4|m4v|webm|mkv|mov|avi)$/i.test(source)
+    readonly property string source: settings.source || ""
+    readonly property bool isAnimated: /\.(gif|webp|apng)$/i.test(source)
+    readonly property bool active: isAnimated && source.length > 0 && Wallpapers.actualCurrent === source
 
-    Loader {
+    visible: active
+
+    AnimatedImage {
         anchors.fill: parent
-        sourceComponent: root.isVideo ? videoComponent : imageComponent
-    }
-
-    Component {
-        id: imageComponent
-
-        AnimatedImage {
-            anchors.fill: parent
-            source: root.source
-            fillMode: Image.PreserveAspectCrop
-            asynchronous: true
-            playing: true
-        }
-    }
-
-    Component {
-        id: videoComponent
-
-        Video {
-            id: video
-
-            anchors.fill: parent
-            source: root.source
-            fillMode: VideoOutput.PreserveAspectCrop
-            loops: MediaPlayer.Infinite
-            autoPlay: true
-            muted: true
-        }
+        source: root.active ? root.source : ""
+        fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        playing: PersistentState.wallpaperPlaying
     }
 }
