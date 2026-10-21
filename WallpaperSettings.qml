@@ -59,7 +59,7 @@ ColumnLayout {
 
         title: Tr.tr("Choose a live wallpaper")
         filterLabel: Tr.tr("Videos and animated images")
-        filters: ["mp4", "webm", "mkv", "mov", "gif", "webp"]
+        filters: ["mp4", "m4v", "webm", "mkv", "mov", "avi", "gif", "webp"]
         onAccepted: path => {
             root.settings.source = path;
             Wallpapers.setWallpaper(path);
