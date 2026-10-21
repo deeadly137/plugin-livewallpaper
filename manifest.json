@@ -3,6 +3,12 @@
     "author": "deeadly137",
     "version": "0.2.0",
     "description": "Video and animated-image wallpapers with controls in Wallpaper & style.",
+    "tags": [
+        "wallpaper",
+        "video",
+        "gif",
+        "wallpaper-style"
+    ],
     "settings": "settings.qml",
     "entryPoints": [
         {
