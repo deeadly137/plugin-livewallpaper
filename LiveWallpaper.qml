@@ -1,10 +1,10 @@
 import QtQuick
 import Caelestia.Plugins
-import Caelestia.State
 import qs.services
 
 // Animated GIF/WebP wallpapers need an AnimatedImage; the shell's background Visual only keeps a
-// still frame for those formats. Videos are rendered by the normal background path instead.
+// still frame for those formats. Videos are rendered by the normal background path instead. The
+// overlay yields to an external provider (Wallpaper Engine) and follows the shared pause state.
 Item {
     id: root
 
@@ -12,7 +12,7 @@ Item {
 
     readonly property string source: settings.source || ""
     readonly property bool isAnimated: /\.(gif|webp|apng)$/i.test(source)
-    readonly property bool active: isAnimated && source.length > 0 && Wallpapers.actualCurrent === source
+    readonly property bool active: isAnimated && source.length > 0 && Wallpapers.actualCurrent === source && !Wallpapers.externalActive
 
     visible: active
 
@@ -21,6 +21,6 @@ Item {
         source: root.active ? root.source : ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
-        playing: PersistentState.wallpaperPlaying
+        playing: WallpaperPauser.playing
     }
 }

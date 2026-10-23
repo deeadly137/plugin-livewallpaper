@@ -1,13 +1,14 @@
 {
     "name": "livewall",
     "author": "deeadly137",
-    "version": "0.2.0",
-    "description": "Video and animated-image wallpapers with controls in Wallpaper & style.",
+    "version": "0.3.0",
+    "description": "Video, animated-image and Wallpaper Engine wallpapers with controls in Wallpaper & style.",
     "tags": [
         "wallpaper",
         "video",
         "gif",
-        "wallpaper-style"
+        "wallpaper-style",
+        "wallpaper-engine"
     ],
     "settings": "settings.qml",
     "entryPoints": [
@@ -21,6 +22,10 @@
         {
             "type": "desktop-widget",
             "source": "LiveWallpaper.qml"
+        },
+        {
+            "type": "custom",
+            "source": "EngineProvider.qml"
         }
     ]
 }
